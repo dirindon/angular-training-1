@@ -1,28 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService } from '../cart.service';
-import { ProductInCart } from '../products';
+import {Component, OnInit} from '@angular/core';
+import {CartService} from '../cart.service';
+import {ProductInCart} from '../products';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css'],
+    selector: 'app-cart',
+    templateUrl: './cart.component.html',
+    styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  items = this.cartService.getItems();
+    items = this.cartService.getItems();
 
-  constructor(private cartService: CartService) {}
+    checkoutForm = this.formBuilder.group({
+        name: '',
+        address: ''
+    });
 
-  ngOnInit(): void {}
 
-  getTotalPrice(): number {
-    return this.cartService.getTotalPrice();
-  }
+    constructor(private cartService: CartService,
+                private formBuilder: FormBuilder,) {
+    }
 
-  removeOne(item: ProductInCart) {
-    this.cartService.lowerAmountInCart(item);
-  }
+    ngOnInit(): void {
+    }
 
-  addOne(item: ProductInCart) {
-    this.cartService.increaseAmountInCart(item);
-  }
+    onSubmit(): void {
+        // Process checkout data here
+        this.items = this.cartService.clearCart();
+        console.warn('Your order has been submitted', this.checkoutForm.value);
+        this.checkoutForm.reset();
+    }
+
+    getTotalPrice(): number {
+        return this.cartService.getTotalPrice();
+    }
+
+    removeOne(item: ProductInCart) {
+        this.cartService.lowerAmountInCart(item);
+    }
+
+    addOne(item: ProductInCart) {
+        this.cartService.increaseAmountInCart(item);
+    }
 }
