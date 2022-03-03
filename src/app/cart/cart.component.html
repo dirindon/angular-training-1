@@ -1,0 +1,13 @@
+<h3>Cart</h3>
+
+<div class="cart-item" *ngFor="let item of items">
+  <button (click)="removeOne(item)">-</button>
+  <span>{{ item.amount }}</span>
+  <button (click)="addOne(item)">+</button>
+  <span>{{ item.name }}</span>
+  <span>{{ item.price | currency }}</span>
+</div>
+
+<div class="cart-total" *ngIf="items.length > 0">
+  <span>Total price : {{ getTotalPrice() | currency }}</span>
+</div>
